@@ -1,2 +1,2 @@
 #!/bin/bash
-python app.py
+python app.py --port=8080
