@@ -1,3 +1,5 @@
 .gradio
 .idea
 .venv
+quantized.py
+model.pth
