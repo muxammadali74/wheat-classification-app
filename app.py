@@ -1,14 +1,18 @@
 import gradio as gr
 import torch
+import kagglehub
+import os 
 from torchvision import transforms, models
 from torchvision.models import ResNet50_Weights
 from PIL import Image
 
+model_path = kagglehub.model_download("aliochilov/wheat/pyTorch/default")
+model_file = os.path.join(model_path, "model.pth")
+
 model = models.resnet50(weights=ResNet50_Weights.IMAGENET1K_V1)
 model.fc = torch.nn.Linear(model.fc.in_features, 2)
 
-model_path = r"D:\Myprojects\Python\Классификация пшеницы\models\model.pth"
-model.load_state_dict(torch.load(model_path, map_location=torch.device("cpu")))
+model.load_state_dict(torch.load(model_file, map_location=torch.device("cpu")))
 model.eval()
 
 

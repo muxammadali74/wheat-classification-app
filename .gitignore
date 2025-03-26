@@ -1,4 +1,3 @@
-.venv/
-.gradio/
+.gradio
 .idea
-WheatSickHealthy/dataset.zip
+.venv
