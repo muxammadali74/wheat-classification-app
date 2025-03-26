@@ -50,4 +50,5 @@ app = gr.Interface(
     theme="default",
 )
 
-app.launch(server_name="0.0.0.0", share=True)
+port = int(os.getenv("PORT", 7860))
+app.launch(server_name="0.0.0.0", server_port=port)
