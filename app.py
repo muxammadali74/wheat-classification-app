@@ -2,6 +2,7 @@ import gradio as gr
 import torch
 import kagglehub
 import os 
+import torch.nn as nn
 from torchvision import transforms, models
 from torchvision.models import ResNet50_Weights
 from PIL import Image
@@ -9,10 +10,16 @@ from PIL import Image
 # model_path = kagglehub.model_download("aliochilov/wheat/pyTorch/default")
 # model_file = os.path.join(model_path, "model.pth")
 
-model_file = 'model.pth'
+model_file = r'D:\Myprojects\Python\For_GitHub\wheat-classification-app\models\redner50_model.pth'
 
 model = models.resnet50(weights=ResNet50_Weights.IMAGENET1K_V1)
-model.fc = torch.nn.Linear(model.fc.in_features, 2)
+num_features = model.fc.in_features
+model.fc = nn.Sequential(
+    nn.BatchNorm1d(num_features),  # Добавляем Batch Normalization
+    nn.Linear(num_features, 512),  # Дополнительный слой (можно убрать)
+    nn.ReLU(),                      # Активация
+    nn.Linear(512, 2)               # Выходной слой для 2 классов
+)
 
 model.load_state_dict(torch.load(model_file, map_location=torch.device("cpu")))
 model.eval()
@@ -52,5 +59,6 @@ app = gr.Interface(
     theme="default",
 )
 
-port = int(os.environ.get("PORT", 8080))
-app.launch(server_name="0.0.0.0", server_port=port)
+# port = int(os.environ.get("PORT", 8080))
+# app.launch(server_name="0.0.0.0", server_port=port)
+app.launch()
